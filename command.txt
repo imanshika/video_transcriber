@@ -1,0 +1,5 @@
+npx http-server ./frontend
+cd /backend
+npm init 
+npm install dotenv ejs express cors body-parser @google-cloud/speech multer 
+npm install ffmpeg-static@4.4.1 fluent-ffmpeg

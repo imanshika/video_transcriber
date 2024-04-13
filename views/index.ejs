@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Transcribing App</title>
+    <!-- Import Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #transcribedText{
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Preview Video</h2>
+                <video id="videoPreview" controls class="w-100"></video>
+                <h2 class="mt-4">Upload Video</h2>
+                <input type="file" id="videoUpload" class="form-control" />
+                <button id="transcribeButton" type="button" class="btn btn-primary mt-2">Transcribe</button>
+            </div>
+            <div class="col-lg-6">
+                <h2>Transcribed Text</h2>
+                <div id="transcribedText" class="border border-primary h-100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        const videoUpload = document.getElementById("videoUpload");
+        const videoPrivew = document.getElementById("videoPreview");
+        const transcribedText = document.getElementById("transcribedText");
+        const transcribeButton = document.getElementById("transcribeButton");
+
+        let selectedFile;
+
+        videoUpload.addEventListener("change", function(e){
+            if(e.target.files && e.target.files.length > 0){
+                selectedFile = e.target.files[0];
+                let selectedVideo = URL.createObjectURL(selectedFile);
+                videoPrivew.src = selectedVideo;
+            }
+        })
+
+        async function transcribeVideo(){
+            let formData = new FormData();
+            formData.append("file", selectedFile);
+
+            try{
+
+                let response = await axios.post("http://localhost:2000/transcribe", formData, {
+                    headers: {
+                        'content-Type': 'multipart/form-data'
+                    }
+                })
+
+                if(response.data){
+                    transcribedText.innerHTML = response.data.text; // displayTranscription
+                }
+
+            }catch (error){                
+                console.log(`Error Ocurred while transcribing Video \n ${error}`);
+                alert("Video Transcription Failed")
+            }
+        }
+
+        transcribeButton.addEventListener("click", transcribeVideo);
+
+
+
+
+    </script>
+
+</body>
+</html>
