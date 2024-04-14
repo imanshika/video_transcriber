@@ -4,7 +4,8 @@ npm init
 npm install dotenv ejs express cors body-parser @google-cloud/speech multer 
 npm install ffmpeg-static@4.4.1 fluent-ffmpeg
 
-ython -m ipykernel install --user --name=pyenv12
+pip install jupyter
+python -m ipykernel install --user --name=pyenv12
 jupyter kernelspec list
 
 jupyter kernelspec uninstall nw_py12
